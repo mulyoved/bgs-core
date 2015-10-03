@@ -146,6 +146,12 @@ public abstract class BackgroundService extends Service {
 		doWorkWrapper();
 	}
 
+	protected String sendInternalData() {
+		JSONObject data = internalData();
+		return data.toString();
+	}
+
+
 	/*
 	 ************************************************************************************************
 	 * Private methods 
@@ -262,6 +268,11 @@ public abstract class BackgroundService extends Service {
 		@Override
 		public void run() throws RemoteException {
 			runOnce();
+		}
+
+		@Override
+		public String getInternalData() throws RemoteException {
+			return sendInternalData();
 		}
 	};
 
@@ -403,7 +414,14 @@ public abstract class BackgroundService extends Service {
 		}
 		
 	}
-	
+
+	@Override
+	public void onCreate() {
+		Log.i(TAG, "On create");
+	}
+
+
+
 	/*
 	 ************************************************************************************************
 	 * Methods for subclasses to override 
@@ -413,7 +431,8 @@ public abstract class BackgroundService extends Service {
 	protected abstract JSONObject doWork();
 	protected abstract JSONObject getConfig();
 	protected abstract void setConfig(JSONObject config);
-	
+	protected abstract JSONObject internalData();
+
 	protected void onTimerEnabled() {
 	}
 
@@ -425,4 +444,6 @@ public abstract class BackgroundService extends Service {
 	
 	protected void onPauseComplete() {
 	}
+
+
 }

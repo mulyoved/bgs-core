@@ -190,6 +190,20 @@ BackgroundServiceFactory.prototype.create = function (serviceName) {
 	};
 
 	/**
+	  * Returns the getInternalData once
+	  *
+	  * @param successCallback The callback which will be called if the method is successful
+	  * @param failureCallback The callback which will be called if the method encounters an error
+	  */
+	BackgroundService.prototype.getInternalData = function(successCallback, failureCallback) {
+		return exec(	successCallback,
+						failureCallback,
+						'BackgroundServicePlugin',
+						'getInternalData',
+						[this.getServiceName()]);
+	};
+
+	/**
 	  * Registers for doWork() updates
 	  *
 	  * @param successCallback The callback which will be called if the method is successful

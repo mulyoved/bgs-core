@@ -45,6 +45,7 @@ public class BackgroundServicePluginLogic {
 	public static final String ACTION_GET_STATUS = "getStatus";
 
 	public static final String ACTION_RUN_ONCE = "runOnce";
+	public static final String ACTION_GET_INTERNAL_DATA = "getInternalData";
 
 	public static final String ACTION_REGISTER_FOR_UPDATES = "registerForUpdates";
 	public static final String ACTION_DEREGISTER_FOR_UPDATES = "deregisterForUpdates";
@@ -138,6 +139,7 @@ public class BackgroundServicePluginLogic {
 		if(ACTION_GET_STATUS.equals(action)) result = true;
 
 		if(ACTION_RUN_ONCE.equals(action)) result = true;
+		if(ACTION_GET_INTERNAL_DATA.equals(action)) result = true;
 		
 		if(ACTION_REGISTER_FOR_UPDATES.equals(action)) result = true;
 		if(ACTION_DEREGISTER_FOR_UPDATES.equals(action)) result = true;
@@ -207,6 +209,7 @@ public class BackgroundServicePluginLogic {
 						if (ACTION_SET_CONFIGURATION.equals(action)) result = service.setConfiguration(data);
 
 						if (ACTION_RUN_ONCE.equals(action)) result = service.runOnce();
+						if (ACTION_GET_INTERNAL_DATA.equals(action)) result = service.getInternalData();
 
 					} else {
 						result = new ExecuteResult(ExecuteStatus.INVALID_ACTION);
@@ -489,6 +492,28 @@ public class BackgroundServicePluginLogic {
 				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
 			}
 			
+			return result;
+		}
+
+		public ExecuteResult getInternalData()
+		{
+			ExecuteResult result = null;
+
+			try {
+				if (this.isServiceRunning()) {
+					String internalData = mApi.getInternalData();
+					JSONObject answer = createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG);
+					try { answer.put("InternalData", new JSONObject(internalData)); } catch (Exception ex) {Log.d(LOCALTAG, "Adding internalData to JSONObject failed", ex);};
+
+					result = new ExecuteResult(ExecuteStatus.OK, answer);
+				} else {
+					result = new ExecuteResult(ExecuteStatus.INVALID_ACTION, createJSONResult(false, ERROR_SERVICE_NOT_RUNNING_CODE, ERROR_SERVICE_NOT_RUNNING_MSG));
+				}
+			} catch (RemoteException ex) {
+				Log.d(LOCALTAG, "getInternalData failed", ex);
+				result = new ExecuteResult(ExecuteStatus.ERROR, createJSONResult(false, ERROR_EXCEPTION_CODE, ex.getMessage()));
+			}
+
 			return result;
 		}
 

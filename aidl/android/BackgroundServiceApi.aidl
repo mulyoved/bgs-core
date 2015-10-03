@@ -22,4 +22,6 @@ interface BackgroundServiceApi {
 	int getTimerMilliseconds();
 	
 	void run();
-} 
+
+	String getInternalData();
+}
