@@ -67,17 +67,18 @@ public class BackgroundServicePlugin extends CordovaPlugin implements Background
 					public void run() {
 						ExecuteResult logicResult = mLogic.execute(action, data, listener, listenerExtras);
 
-						Log.d(TAG, "logicResult = " +  logicResult.toString());
+						//Log.d(TAG, "logicResult = " +  logicResult.toString());
 						
 						PluginResult pluginResult = transformResult(logicResult);
-												
+
+						/*
 						Log.d(TAG, "pluginResult = " +  pluginResult.toString());
 						Log.d(TAG, "pluginResult.getMessage() = " +  pluginResult.getMessage());
 						if (pluginResult.getKeepCallback())
 							Log.d(TAG, "Keep Callback");
 						else
 							Log.d(TAG, "Dont keep Callback");
-						
+						*/
 						callback.sendPluginResult(pluginResult);
 					}
 				});
@@ -110,15 +111,15 @@ public class BackgroundServicePlugin extends CordovaPlugin implements Background
 	 ************************************************************************************************
 	 */
 	public void handleUpdate(ExecuteResult logicResult, Object[] listenerExtras) {
-		Log.d(TAG, "Starting handleUpdate");
+		//Log.d(TAG, "Starting handleUpdate");
 		sendUpdateToListener(logicResult, listenerExtras);
-		Log.d(TAG, "Finished handleUpdate");
+		//Log.d(TAG, "Finished handleUpdate");
 	}
 	
 	public void closeListener(ExecuteResult logicResult, Object[] listenerExtras) {
-		Log.d(TAG, "Starting closeListener");
+		//Log.d(TAG, "Starting closeListener");
 		sendUpdateToListener(logicResult, listenerExtras);
-		Log.d(TAG, "Finished closeListener");
+		//Log.d(TAG, "Finished closeListener");
 	}
 
 	/*
@@ -129,11 +130,11 @@ public class BackgroundServicePlugin extends CordovaPlugin implements Background
 	private void sendUpdateToListener(ExecuteResult logicResult, Object[] listenerExtras) {
 		try {
 			if (listenerExtras != null && listenerExtras.length > 0) {
-				Log.d(TAG, "Sending update");
+				//Log.d(TAG, "Sending update");
 				CallbackContext callback = (CallbackContext)listenerExtras[0];
 		
 				callback.sendPluginResult(transformResult(logicResult));
-				Log.d(TAG, "Sent update");
+				//Log.d(TAG, "Sent update");
 			}
 		} catch (Exception ex) {
 			Log.d(TAG, "Sending update failed", ex);
@@ -143,15 +144,15 @@ public class BackgroundServicePlugin extends CordovaPlugin implements Background
 	private PluginResult transformResult(ExecuteResult logicResult) {
 		PluginResult pluginResult = null;
 		
-		Log.d(TAG, "Start of transformResult");
+		//Log.d(TAG, "Start of transformResult");
 		if (logicResult.getStatus() == ExecuteStatus.OK) {
-			Log.d(TAG, "Status is OK");
+			//Log.d(TAG, "Status is OK");
 			
 			if (logicResult.getData() == null) {
-				Log.d(TAG, "We dont have data");
+				//Log.d(TAG, "We dont have data");
 				pluginResult = new PluginResult(PluginResult.Status.OK);
 			} else {
-				Log.d(TAG, "We have data");
+				//Log.d(TAG, "We have data");
 				pluginResult = new PluginResult(PluginResult.Status.OK, logicResult.getData());
 			}
 		}
@@ -181,11 +182,11 @@ public class BackgroundServicePlugin extends CordovaPlugin implements Background
 		}
 		
 		if (!logicResult.isFinished()) {
-			Log.d(TAG, "Keep Callback set to true");
+			//Log.d(TAG, "Keep Callback set to true");
 			pluginResult.setKeepCallback(true);
 		}
 		
-		Log.d(TAG, "End of transformResult");
+		//Log.d(TAG, "End of transformResult");
 		return pluginResult;
 	}
 }

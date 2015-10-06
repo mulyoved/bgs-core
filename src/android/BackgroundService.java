@@ -354,28 +354,28 @@ public abstract class BackgroundService extends Service {
 
 			@Override    
 			public void run() {       
-				Log.i(TAG, "Timer task starting work");
+				//Log.i(TAG, "Timer task starting work");
 
-				Log.d(TAG, "Is the service paused?");
+				//Log.d(TAG, "Is the service paused?");
 				Boolean paused = false;
 				if (mPausedUntil != null) {
-					Log.d(TAG, "Service is paused until " + (new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")).format(mPausedUntil));
+					//Log.d(TAG, "Service is paused until " + (new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")).format(mPausedUntil));
 					Date current = new Date();
-					Log.d(TAG, "Current is " + (new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")).format(current));
+					//Log.d(TAG, "Current is " + (new SimpleDateFormat("dd/MM/yyyy hh:mm:ss")).format(current));
 					if (mPausedUntil.after(current)) {
-						Log.d(TAG, "Service should be paused");
+						//Log.d(TAG, "Service should be paused");
 						paused = true;					// Still paused
 					} else {
-						Log.d(TAG, "Service should not be paused");
+						//Log.d(TAG, "Service should not be paused");
 						mPausedUntil = null;				// Paused time has past so we can clear the pause
 						onPauseComplete();
 					}
 				}
 
 				if (paused) {
-					Log.d(TAG, "Service is paused");
+					//Log.d(TAG, "Service is paused");
 				} else {
-					Log.d(TAG, "Service is not paused");
+					//Log.d(TAG, "Service is not paused");
 					
 					// Runs the doWork 
 					// Sets the last result & updates the listeners
@@ -398,16 +398,16 @@ public abstract class BackgroundService extends Service {
 			Log.i(TAG, "Exception occurred during doWork()", ex);
 		}
 
-		Log.i(TAG, "Syncing result");
+		//Log.i(TAG, "Syncing result");
 		setLatestResult(tmp);
 		
 		// Now call the listeners
-		Log.i(TAG, "Sending to all listeners");
+		//Log.i(TAG, "Sending to all listeners");
 		for (int i = 0; i < mListeners.size(); i++)
 		{
 			try {
 				mListeners.get(i).handleUpdate();
-				Log.i(TAG, "Sent listener - " + i);
+				//Log.i(TAG, "Sent listener - " + i);
 			} catch (RemoteException e) {
 				Log.i(TAG, "Failed to send to listener - " + i + " - " + e.getMessage());
 			}

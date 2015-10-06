@@ -154,9 +154,9 @@ public class BackgroundServicePluginLogic {
 	public ExecuteResult execute(String action, JSONArray data, IUpdateListener listener, Object[] listenerExtras) {
 		ExecuteResult result = null;
 		
-		Log.d(TAG, "Start of Execute");
+		//Log.d(TAG, "Start of Execute");
 		try {
-			Log.d(TAG, "Withing try block");
+			//Log.d(TAG, "Withing try block");
 			if ((data != null) &&
 					(!data.isNull(0)) &&
 					(data.get(0) instanceof String) &&
@@ -164,14 +164,14 @@ public class BackgroundServicePluginLogic {
 
 				String serviceName = data.getString(0);
 				
-				Log.d(TAG, "Finding servicename " + serviceName);
+				//Log.d(TAG, "Finding servicename " + serviceName);
 				
 				ServiceDetails service = null;
 
-				Log.d(TAG, "Services contain " + this.mServices.size() + " records");
+				//Log.d(TAG, "Services contain " + this.mServices.size() + " records");
 				
 				if (this.mServices.containsKey(serviceName)) {
-					Log.d(TAG, "Found existing Service Details");
+					//Log.d(TAG, "Found existing Service Details");
 					service = this.mServices.get(serviceName);
 				} else {
 					Log.d(TAG, "Creating new Service Details");
@@ -179,7 +179,7 @@ public class BackgroundServicePluginLogic {
 					this.mServices.put(serviceName, service);
 				}
 
-				Log.d(TAG, "Action = " + action);
+				//Log.d(TAG, "Action = " + action);
 
 
 				if (!service.isInitialised())
@@ -196,10 +196,10 @@ public class BackgroundServicePluginLogic {
 				if (ACTION_DEREGISTER_FOR_UPDATES.equals(action)) result = service.deregisterForUpdates();
 
 				if (result == null) {
-					Log.d(TAG, "Check if the service is running?");
+					//Log.d(TAG, "Check if the service is running?");
 
 					if (service != null && service.isServiceRunning()) {
-						Log.d(TAG, "Service is running?");
+						//Log.d(TAG, "Service is running?");
 						
 						if (ACTION_STOP_SERVICE.equals(action)) result = service.stopService();
 
@@ -503,7 +503,12 @@ public class BackgroundServicePluginLogic {
 				if (this.isServiceRunning()) {
 					String internalData = mApi.getInternalData();
 					JSONObject answer = createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG);
-					try { answer.put("InternalData", new JSONObject(internalData)); } catch (Exception ex) {Log.d(LOCALTAG, "Adding internalData to JSONObject failed", ex);};
+					try {
+						answer.put("InternalData", new JSONObject(internalData));
+					}
+					catch (Exception ex) {
+						Log.d(LOCALTAG, "Adding internalData to JSONObject failed", ex);
+					};
 
 					result = new ExecuteResult(ExecuteStatus.OK, answer);
 				} else {
@@ -696,15 +701,15 @@ public class BackgroundServicePluginLogic {
 		};
 
 		private void handleLatestResult() {
-			Log.d("ServiceDetails", "Latest results received");
+			//Log.d("ServiceDetails", "Latest results received");
 			
 			if (this.isRegisteredForUpdates()) {
-				Log.d("ServiceDetails", "Calling listener");
+				//Log.d("ServiceDetails", "Calling listener");
 				
 				ExecuteResult result = new ExecuteResult(ExecuteStatus.OK, createJSONResult(true, ERROR_NONE_CODE, ERROR_NONE_MSG), false);
 				try {
 					this.mListener.handleUpdate(result, this.mListenerExtras);
-					Log.d("ServiceDetails", "Listener finished");
+					//Log.d("ServiceDetails", "Listener finished");
 				} catch (Exception ex) {
 					Log.d("ServiceDetails", "Listener failed", ex);
 					Log.d("ServiceDetails", "Disabling listener");
